@@ -1,0 +1,15 @@
+db:
+  image: mongo:3.2.4
+  ports:
+    - "27017:27017"
+  command: "--smallfiles --logpath=/dev/null"
+web:
+  build: .
+  volumes:
+    - .:/app
+  ports:
+    - "3000:3000"
+  links:
+    - db
+  environment:
+    PORT: 3000 
