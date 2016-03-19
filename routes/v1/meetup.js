@@ -2,21 +2,25 @@
 
 const express = require('express');
 const router = express.Router();
-const meetup = require('../../config/meetup');
-const request = require('request');
 
 
-router.get('/attendance/:event', (req, res, next) => {
+var _events = require('../../controllers/v1/events');
 
-	const event = req.params.event;
+var cb = function(err, data, res) {
+  var msg = '';
+  if (err) {
+    msg = {error: err};
+  }
+  else {
+    msg = data;
+  }
+  console.log(msg);
+  res.json(msg);
+}
 
-	request({
-		url: meetup.baseUrl + meetup.urlName + '/events/' + event + '/attendance' + meetup.key + meetup.sign,
-        json: true,
-        timeout: 10000
-	}, (error, response, body) => {
-		res.send(body);
-	})
-})
+// 226163759
+router.get('/rsvp/:event', (req, res) => {
+	_events.create(req, res, cb);
+});
 
 module.exports = router;
