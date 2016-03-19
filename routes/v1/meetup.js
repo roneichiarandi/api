@@ -14,7 +14,7 @@ var cb = function(err, data, res) {
   else {
     msg = data;
   }
-  console.log(msg);
+  // console.log(msg);
   res.json(msg);
 }
 
