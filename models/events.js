@@ -1,6 +1,6 @@
 const db = require('../config/database');
 
-var EventSchema = new db.Schema({
+const EventSchema = new db.Schema({
   meetupId: Number,
   name: { type: String, default: '' },
   participants: { type: db.Schema.Types.Mixed, default: [] },

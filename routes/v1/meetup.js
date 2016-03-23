@@ -3,10 +3,9 @@
 const express = require('express');
 const router = express.Router();
 
-
 var _events = require('../../controllers/v1/events');
 
-var cb = function(err, data, res) {
+var cb = function (err, data, res) {
   var msg = '';
   if (err) {
     msg = {error: err};
@@ -14,13 +13,16 @@ var cb = function(err, data, res) {
   else {
     msg = data;
   }
-  // console.log(msg);
   res.json(msg);
 }
 
 // 226163759
-router.get('/rsvp/:event', (req, res) => {
-	_events.create(req, res, cb);
+router.route('/rsvp/:event').get( (req, res) => {
+  _events.rsvp(req, res, cb);
+});
+
+router.get('/attendance/:event', (req, res) => {
+  _events.attendance(req, res, cb);
 });
 
 module.exports = router;

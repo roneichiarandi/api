@@ -1,71 +1,92 @@
 "use strict";
-var attendance = require('../../rsvp.json');
-var EventModel = require("../../models/events");
 
-const request = require('request');
-const meetup = require('../../config/meetup');
+const EventModel = require("../../models/events");
+const AttendanceModel = require("../../models/attendance");
 
-var msg = '';
+var request = require('request');
+var meetup = require('../../config/meetup');
+
 
 module.exports = {
-	create: function(req, res, cb) {
-		let event = req.body; //recebe o id do evento pela url
+    rsvp: (req, res, cb) => {
+        let event = req.params.event; //recebe o id do evento pela url
+        let url = meetup.baseUrl + meetup.urlName + '/events/' + event + '/rsvp' + meetup.key + meetup.sign;
 
-		request({
-			url: meetup.baseUrl + meetup.urlName + '/events/' + event + '/attendance' + meetup.key + meetup.sign,
-	        json: true,
-	        timeout: 10000
-		}, (error, response, body) => {
+        console.log(url);
 
-			console.log(response)
-			var dados = {};
-			var participants = [];
+        request({
+            url: url,
+            json: true,
+            timeout: 10000
+        }, (error, response, body) => {
 
-			attendance.forEach( (data) => {
-				var member = data.member;
-				var participant = {}
+            var dados = {};
+            var participants = [];
+            var eventData = body;
 
-				participant = {
-					mermberId: member.id,
-					name: member.name,
-					photo: member.photo,
-					rsvp: data.response,
-					present: 'no'
-				};
+            eventData.forEach( (data) => {
+                var member = data.member;
+                var participant = {}
 
-				participants.push(participant);
+                participant = {
+                    mermberId: member.id,
+                    name: member.name,
+                    photo: member.photo,
+                    rsvp: data.response,
+                    present: 'no'
+                };
 
-			} );
+                participants.push(participant);
 
-			dados = {
-				meetupId: attendance[0].event.id,
-				name: attendance[0].event.name,
-				participants: participants
-			}
+            } );
 
-			var model = new EventModel(dados);
-			model.save(function (err, data) {
-				cb(err, data, res);
-				res.end();
-			});
-		})
-	},
-	retrieve: function(req, res, cb) {
-		var query = {};
-		Beer.find(query, function (err, data) {
-			cb(err, data, res);
-			res.end();
-		});
-	},
-	findOne: function(req, res, cb){
-		var id = req.params.id;
-		var query = { _id: id };
+            dados = {
+                meetupId: eventData[0].event.id,
+                name: eventData[0].event.name,
+                participants: participants
+            }
 
-		Beer.findOne(query, function (err, data) {
-			cb(err, data, res);
-			res.end();
-		});
-	}
+            let model = new EventModel(dados);
+            model.save( (err, data) => {
+                cb(err, data, res);
+                res.end();
+            });
+        })
+    },
+    attendance: (req, res, cb) => {
+        let event = req.params.event; //recebe o id do evento pela url
+        let url = meetup.baseUrl + meetup.urlName + '/events/' + event + '/attendance' + meetup.key + meetup.sign;
+
+        console.log(url)
+
+        request({
+            url: url,
+            json: true,
+            timeout: 10000
+        }, (error, response, body) => {
+
+            var eventData = body;
+            var participants = [];
+
+            eventData.forEach( (data) => {
+
+                var member = data.member;
+                var rsvp = data.rsvp ? data.rsvp.response : 'no';
+                var photo = member.photo ? member.photo.thumb : '';
+                var participant = {}
+
+                participant = {
+                    meetupUserId: member.id,
+                    name: member.name,
+                    photo: photo,
+                    rsvp: rsvp,
+                };
+
+                participants.push(participant);
+            });
+
+            console.log(participants);
+            res.end();
+        })
+    }
 };
-
-// module.exportes = _beer;
