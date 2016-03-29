@@ -16,12 +16,20 @@ var cb = function (err, data, res) {
   res.json(msg);
 };
 
-router.route('/save').post( (req, res) => {
-  _certificate.save(req, res, cb);
+router.route('/:email').get( (req, res) => {
+  _certificate.find(req, res, cb);
 });
 
 router.route('/').get( (req, res) => {
   _certificate.get(req, res, cb);
+});
+
+router.route('/save').post( (req, res) => {
+  _certificate.save(req, res, cb);
+});
+
+router.route('/').delete( (req, res) => {
+  _certificate.delete(req, res, cb);
 });
 
 module.exports = router;
