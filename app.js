@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var api = {};
 api.meetup = require('./routes/v1/meetup');
+api.certificate = require('./routes/v1/certificate');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/v1/meetup', api.meetup);
+app.use('/v1/certificate', api.certificate);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
