@@ -1,6 +1,6 @@
 "use strict";
 
-const EventModel = require("../../models/events");
+const EventModel = require("../../models/event");
 const AttendanceModel = require("../../models/attendance");
 
 var request = require('request');

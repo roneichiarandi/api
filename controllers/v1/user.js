@@ -1,6 +1,6 @@
 "use strict";
 
-const UserModel = require("../../models/users");
+const UserModel = require("../../models/user");
 
 module.exports = {
     save: (req, res, cb) => {
@@ -22,6 +22,30 @@ module.exports = {
     },
     delete: (req, res, cb) => {
         UserModel.remove({}, function(err, data){
+            res.send(data);
+            res.end();
+        });
+    },
+    presence: (req, res, cb) => {
+        UserModel.update(
+            {_id: req.params.user_id},
+            {$push:{events: req.body.event_id}},
+            function (err, data) {
+                if (err) {
+                    cb(err, null, res);
+                    return false;
+                }
+                res.send(data);
+                res.end();
+            }
+        );
+    },
+    find: (req, res, cb) => {
+        UserModel.findOne({_id: req.params.user_id}, function (err, data) {
+            if (err) {
+                cb(err, null, res);
+                return false;
+            }
             res.send(data);
             res.end();
         });
