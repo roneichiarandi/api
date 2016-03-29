@@ -20,8 +20,32 @@ module.exports = {
         });
     },
     create: (req, res, cb) => {
-        let certificateData = req.body;
+        let certificateData = {
+            _event: req.body.event_id,
+            _user: req.body.user_id,
+            emmited: false
+        };
+        let model = new CertificateModel(certificateData);
+        model.save(function(err, data) {
+            if (err && err.code === 11000) {
+                let findData = {
+                    _event: req.body.event_id,
+                    _user: req.body.user_id
+                };
 
-        
+                CertificateModel.findOne(findData, function(err, data){
+                    cb(err, data, res);
+                });
+                return false;
+            }
+
+            if (err) {
+                cb(err, null, res);
+                return false;
+            }
+
+            cb(null, {status: 'ok'}, res);
+            res.end();
+        });
     }
 };
