@@ -88,5 +88,28 @@ module.exports = {
             console.log(participants);
             res.end();
         })
+    },
+    save: (req, res, cb) => {
+        let model = new EventModel(req.body);
+        model.save( (err, data) => {
+            if(err) {
+                cb(err, null, res);
+                return false;
+            }
+            cb(null, {status: 'ok'}, res);
+        });
+    },
+    get: (req, res, cb) => {
+        EventModel.find({}, function(err, data){
+            res.send(data);
+            res.end();
+        });
+    },
+    find: (req, res, cb) => {
+        console.log(req.params);
+        EventModel.find({'_id': req.params.event_id}, function(err, data){
+            res.send(data[0]);
+            res.end();
+        });
     }
 };
