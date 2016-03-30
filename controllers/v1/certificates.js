@@ -34,7 +34,12 @@ module.exports = {
                 };
 
                 CertificateModel.findOne(findData, function(err, data){
-                    cb(err, data, res);
+                    if (err) {
+                        cb(err, null, res);
+                        return false;
+                    }
+
+                    cb(null, {status: 'ok', id: data._id }, res);
                 });
                 return false;
             }
@@ -44,7 +49,7 @@ module.exports = {
                 return false;
             }
 
-            cb(null, {status: 'ok'}, res);
+            cb(null, {status: 'ok', id: data._id }, res);
             res.end();
         });
     }
