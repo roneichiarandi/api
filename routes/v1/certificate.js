@@ -24,6 +24,10 @@ router.route('/').get( (req, res) => {
   _certificate.get(req, res, cb);
 });
 
+router.route('/:certificate_id').get( (req, res) => {
+  _certificate.find(req, res, cb);
+});
+
 router.route('/').delete( (req, res) => {
   _certificate.delete(req, res, cb);
 });

@@ -111,5 +111,11 @@ module.exports = {
             res.send(data[0]);
             res.end();
         });
-    }
+    },
+    delete: (req, res, cb) => {
+        EventModel.remove({}, function(err, data){
+            res.send(data);
+            res.end();
+        });
+    },
 };

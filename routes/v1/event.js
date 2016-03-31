@@ -24,6 +24,10 @@ router.route('/').get( (req, res) => {
   _events.get(req, res, cb);
 });
 
+router.route('/').delete( (req, res) => {
+  _events.delete(req, res, cb);
+});
+
 router.route('/:event_id').get((req, res) => {
   _events.find(req, res, cb);
 });
