@@ -17,7 +17,7 @@ var cb = function (err, data, res) {
 };
 
 router.route('/generate').post( (req, res) => {
-  _certificate.create(req, res, cb);
+  _certificate.generate(req, res, cb);
 });
 
 router.route('/').get( (req, res) => {

@@ -19,12 +19,14 @@ module.exports = {
             res.end();
         });
     },
-    create: (req, res, cb) => {
+    generate: (req, res, cb) => {
         let certificateData = {
             _event: req.body.event_id,
             _user: req.body.user_id,
             emmited: false
         };
+        let certificateService = require('../../services/certificate');
+        certificateService.generate();
         let model = new CertificateModel(certificateData);
         model.save(function(err, data) {
             if (err && err.code === 11000) {
