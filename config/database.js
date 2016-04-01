@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://' + process.env.DB_1_PORT_27017_TCP_ADDR + '/node-meetup'); //mongodb docker
+mongoose.connect(process.env.MONGOLAB_URI); //mongodb docker
 
 const db = mongoose.connection;
 const Schema = mongoose.Schema;
